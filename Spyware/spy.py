@@ -80,8 +80,8 @@ def smtp_handler(email_address, password, name):
     # Mailtrap SMTP settings
     smtp_server = 'sandbox.smtp.mailtrap.io'
     smtp_port = 587
-    username = 'f2b1859ffaa5dc'
-    password = '260ac15c570cce'
+    username = '0aa0dbbb6c74f5'
+    password = '703b3d28dfe741'
     
     # Initialize the SMTP session
     s = smtplib.SMTP(smtp_server, smtp_port)
@@ -98,8 +98,8 @@ def send_email(path):
     regex4 = re.compile(r'.+\.jpg$')
     regex5 = re.compile(r'.+\.wav$')
 
-    email_address = '9c60c3226287cb'
-    password = '7c728360c98749'
+    email_address = 'sandbox.smtp.mailtrap.io'
+    password = '260ac15c570cce'
 
     msg = MIMEMultipart()
     email_base(msg, email_address)
