@@ -1,0 +1,34 @@
+
+.home{ 
+  height: 100vh;
+  background-image: url('../Images/home.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.login-container {
+  height: 100vh;
+  background-image: url('../Images/login.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.card1 {
+  width: 400px;
+  margin: 0 auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  border-radius: 10px; 
+  padding: 20px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  color: #fff;
+}
+
+
+.bg{
+  background-color: #00f9c9;
+}
